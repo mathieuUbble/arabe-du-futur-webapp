@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { fetchQuizzQuestions } from "./API";
-import { QuestionState, Difficulty } from "./API";
-
+import VocabularyCard from "./components/VocabularyCard";
+import { shuffleArray } from "./utils";
+import data from "./images/outputfile.json";
 //Components
-import QuestionCard from "./components/QuestionCard";
 
 import { GlobalStyle, Wrapper } from "./App.style";
+
+type wordTrad = { arab: string; french: string };
 
 export type AnswerObject = {
   question: string;
@@ -13,55 +14,36 @@ export type AnswerObject = {
   correct: boolean;
   correctAnswer: string;
 };
-const TOTAL_QUESTIONS = 10;
 
-const App = () => {
-  const [loading, setLoading] = useState(false);
-  const [questions, setQuestions] = useState<QuestionState[]>([]);
-  const [number, setNumber] = useState(0);
-  const [userAnswers, setUserAnswers] = useState<AnswerObject[]>([]);
-  const [score, setScore] = useState(0);
-  const [gameOver, setGameOver] = useState(true);
+function App() {
+  const [wordIndex, setWordIndex] = useState(0);
+  const [incorrectWord, setIncorrectWord] = useState<wordTrad[]>([]);
+  const [correctWord, setCorrectWord] = useState<wordTrad[]>([]);
+  const [showNextWord, setShowNextWord] = useState(false);
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [allWords, setAllWords] = useState<wordTrad[]>([]);
 
-  const startQuizz = async () => {
-    setLoading(true);
-    setGameOver(false);
-    const newQuestions = await fetchQuizzQuestions(
-      TOTAL_QUESTIONS,
-      Difficulty.MEDIUM
-    );
-    setQuestions(newQuestions);
-    setScore(0);
-    setUserAnswers([]);
-    setNumber(0);
-    setLoading(false);
-  };
-  console.log(questions);
+  function startGame() {
+    setIsPlaying(true);
+    setAllWords(shuffleArray(data));
+  }
+
+  function restartGame() {
+    setWordIndex(0);
+    setShowNextWord(false);
+    setIncorrectWord([]);
+    setCorrectWord([]);
+    setAllWords(shuffleArray(data));
+  }
 
   const checkAnswer = (e: React.MouseEvent<HTMLButtonElement>) => {
-    if (!gameOver) {
-      const answer = e.currentTarget.value;
-      const correct = questions[number].correct_answer === answer;
-      if (correct) {
-        setScore((prev) => prev + 1);
-      }
-      const answerObject = {
-        question: questions[number].question,
-        answer,
-        correct,
-        correctAnswer: questions[number].correct_answer,
-      };
-      setUserAnswers((prev) => [...prev, answerObject]);
-    }
-  };
-
-  const nextQuestion = () => {
-    const nextQuestion = number + 1;
-    if (nextQuestion === TOTAL_QUESTIONS) {
-      setGameOver(true);
+    const answer = e.currentTarget.value;
+    if (answer === "unknown") {
+      setIncorrectWord([...incorrectWord, data[wordIndex]]);
     } else {
-      setNumber(nextQuestion);
+      setCorrectWord([...correctWord, data[wordIndex]]);
     }
+    setShowNextWord(true);
   };
 
   return (
@@ -69,34 +51,41 @@ const App = () => {
       <GlobalStyle />
       <Wrapper className="App">
         <h1>Arab Quizz</h1>
-        {gameOver || userAnswers.length === TOTAL_QUESTIONS ? (
-          <button className="start" onClick={startQuizz}>
-            Start
+        <p className="score">✅ : {correctWord.length}</p>
+        <p className="score">❌ : {incorrectWord.length}</p>
+        {!showNextWord && isPlaying && (
+          <button className="start" onClick={restartGame}>
+            Restart Game 🔁
           </button>
-        ) : null}
-        {!gameOver ? <p className="score">Score : {score}</p> : null}
-        {loading ? <p className="score">Loading Question</p> : null}
-        {!loading && !gameOver && (
-          <QuestionCard
-            questionNr={number + 1}
-            totalQuestions={TOTAL_QUESTIONS}
-            question={questions[number].question}
-            answers={questions[number].answers}
-            userAnswer={userAnswers ? userAnswers[number] : undefined}
+        )}
+        {!isPlaying && (
+          <button className="start" onClick={startGame}>
+            Start The Quizz 🚀
+          </button>
+        )}
+
+        {isPlaying && (
+          <VocabularyCard
+            frenchWord={allWords[wordIndex].french}
+            arabWord={allWords[wordIndex].arab}
+            wordIndex={wordIndex}
             callback={checkAnswer}
           />
         )}
-        {!gameOver &&
-        !loading &&
-        userAnswers.length === number + 1 &&
-        number !== TOTAL_QUESTIONS - 1 ? (
-          <button className="next" onClick={nextQuestion}>
-            Next Question
+        {wordIndex < allWords.length - 1 && showNextWord && (
+          <button
+            className="next"
+            onClick={() => {
+              setWordIndex(wordIndex + 1);
+              setShowNextWord(false);
+            }}
+          >
+            Next Word
           </button>
-        ) : null}
+        )}
       </Wrapper>
     </>
   );
-};
+}
 
 export default App;
