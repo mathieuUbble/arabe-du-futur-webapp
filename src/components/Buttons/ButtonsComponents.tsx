@@ -35,6 +35,8 @@ type KnownWordProps = {
   known: boolean;
 };
 
+type ShowButtonProps = { setShowArabWord: (value: boolean) => void };
+
 export function RestartButton(props: RestartButtonProps) {
   const {
     setWordIndex,
@@ -94,17 +96,28 @@ export function NextWordButton(props: NextWordButtonProps) {
   );
 }
 
+export function ShowButton(props: ShowButtonProps) {
+  const { setShowArabWord } = props;
+  return (
+    <NextWordButtonWrapper>
+      <button onClick={() => setShowArabWord(true)} className="next">
+        👁 Show 👁
+      </button>
+    </NextWordButtonWrapper>
+  );
+}
+
 export function KnownWordButton(props: KnownWordProps) {
   const { onClickAction, showArabWord, known } = props;
   const value = known ? "known" : "unknown";
-  const text = known ? "I know" : "I don't know";
+  const text = known ? "👍 I know" : "👎 I don't know";
 
   return (
-    <KnownButtonWrapper known={known} disabled={showArabWord}>
+    <KnownButtonWrapper known={known} disabled={!showArabWord}>
       <button
         onClick={(e) => onClickAction(e)}
-        disabled={showArabWord}
         value={value}
+        disabled={!showArabWord}
       >
         {text}
       </button>

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Wrapper } from "./VocabularyCard.styles";
 
-import { KnownWordButton } from "../Buttons/ButtonsComponents";
+import { KnownWordButton, ShowButton } from "../Buttons/ButtonsComponents";
 
 type Props = {
   frenchWord: string;
@@ -20,14 +20,15 @@ function VocabularyCard(props: Props) {
   }, [wordIndex]);
 
   const onClickAction = (e: React.MouseEvent<HTMLButtonElement>) => {
-    setShowArabWord(true);
     callback(e);
   };
 
   return (
     <Wrapper>
       <p className="french">🇫🇷 Word : {frenchWord}</p>
+      <ShowButton setShowArabWord={setShowArabWord} />
       {showArabWord && <p className="arab">🇦🇪 Word : {arabWord}</p>}
+
       <KnownWordButton
         showArabWord={showArabWord}
         onClickAction={onClickAction}
