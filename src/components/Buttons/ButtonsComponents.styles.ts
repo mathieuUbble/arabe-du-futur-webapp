@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { ValidateButton } from "./ButtonsComponents";
 
 export const RestartButtonWrapper = styled.div`
   .restartButton {
@@ -28,7 +29,7 @@ export const StartButtonWrapper = styled.div`
   }
 `;
 
-export const NextWordButtonWrapper = styled.div`
+export const ShowWordButtonWrapper = styled.div`
   .next {
     max-width: 200px;
     cursor: point;
@@ -42,8 +43,8 @@ export const NextWordButtonWrapper = styled.div`
   }
 `;
 
-type KnownButtonWrapperProps = { known: boolean; disabled: boolean };
-export const KnownButtonWrapper = styled.div<KnownButtonWrapperProps>`
+type ValidateButtonWrapperProps = { known: boolean; disabled: boolean };
+export const ValidateButtonWrapper = styled.div<ValidateButtonWrapperProps>`
   transition: all 0.3s ease;
 
   :hover {

@@ -6,13 +6,12 @@ import { wordTrad } from "../../App";
 import {
   RestartButtonWrapper,
   StartButtonWrapper,
-  NextWordButtonWrapper,
-  KnownButtonWrapper,
+  ShowWordButtonWrapper,
+  ValidateButtonWrapper,
 } from "./ButtonsComponents.styles";
 
 type RestartButtonProps = {
   setWordIndex: (value: number) => void;
-  setShowNextWord: (value: boolean) => void;
   setIncorrectWord: (value: wordTrad[]) => void;
   setCorrectWord: (value: wordTrad[]) => void;
   setAllWords: (value: wordTrad[]) => void;
@@ -21,12 +20,6 @@ type RestartButtonProps = {
 type StartButtonProps = {
   setIsPlaying: (value: boolean) => void;
   setAllWords: (value: wordTrad[]) => void;
-};
-
-type NextWordButtonProps = {
-  setWordIndex: (value: number) => void;
-  setShowNextWord: (value: boolean) => void;
-  wordIndex: number;
 };
 
 type KnownWordProps = {
@@ -38,17 +31,10 @@ type KnownWordProps = {
 type ShowButtonProps = { setShowArabWord: (value: boolean) => void };
 
 export function RestartButton(props: RestartButtonProps) {
-  const {
-    setWordIndex,
-    setShowNextWord,
-    setIncorrectWord,
-    setCorrectWord,
-    setAllWords,
-  } = props;
+  const { setWordIndex, setIncorrectWord, setCorrectWord, setAllWords } = props;
 
   function restartGame() {
     setWordIndex(0);
-    setShowNextWord(false);
     setIncorrectWord([]);
     setCorrectWord([]);
     setAllWords(shuffleArray(data));
@@ -79,41 +65,24 @@ export function StartButton(props: StartButtonProps) {
   );
 }
 
-export function NextWordButton(props: NextWordButtonProps) {
-  const { setWordIndex, setShowNextWord, wordIndex } = props;
-
-  function nextWord() {
-    setWordIndex(wordIndex + 1);
-    setShowNextWord(false);
-  }
-
-  return (
-    <NextWordButtonWrapper>
-      <button className="next" onClick={nextWord}>
-        Next Word
-      </button>
-    </NextWordButtonWrapper>
-  );
-}
-
 export function ShowButton(props: ShowButtonProps) {
   const { setShowArabWord } = props;
   return (
-    <NextWordButtonWrapper>
+    <ShowWordButtonWrapper>
       <button onClick={() => setShowArabWord(true)} className="next">
         👁 Show 👁
       </button>
-    </NextWordButtonWrapper>
+    </ShowWordButtonWrapper>
   );
 }
 
-export function KnownWordButton(props: KnownWordProps) {
+export function ValidateButton(props: KnownWordProps) {
   const { onClickAction, showArabWord, known } = props;
   const value = known ? "known" : "unknown";
   const text = known ? "👍 I know" : "👎 I don't know";
 
   return (
-    <KnownButtonWrapper known={known} disabled={!showArabWord}>
+    <ValidateButtonWrapper known={known} disabled={!showArabWord}>
       <button
         onClick={(e) => onClickAction(e)}
         value={value}
@@ -121,6 +90,6 @@ export function KnownWordButton(props: KnownWordProps) {
       >
         {text}
       </button>
-    </KnownButtonWrapper>
+    </ValidateButtonWrapper>
   );
 }
