@@ -1,12 +1,13 @@
 import styled, { createGlobalStyle } from "styled-components";
-import BGImage from "./images/arabic-landscape.jpeg";
 
 export const GlobalStyle = createGlobalStyle`
     html {
         height: 100 %
     }
     body {
-        background-image: url(${BGImage});
+        background-color: #0cbaba; 
+        background-image: linear-gradient(180deg, #0f0c29, #302b63, #24243e);
+        background-attachment: fixed;
         background-size: cover;
         margin: 0;
         padding: 0 20px;

@@ -7,8 +7,6 @@ import {
 } from "./components/Buttons/ButtonsComponents";
 
 import { PopUpMissedVoc } from "./components/DialogPopUp/DialogPopUpComponents";
-import data from "./images/outputfile.json";
-//Components
 
 import { GlobalStyle, Wrapper } from "./App.style";
 
@@ -41,7 +39,7 @@ function App() {
         <p className="score">✅ : {correctWord.length}</p>
         <p className="score">❌ : {incorrectWord.length}</p>
 
-        {!showNextWord && isPlaying && (
+        {isPlaying && (
           <RestartButton
             setWordIndex={setWordIndex}
             setShowNextWord={setShowNextWord}
