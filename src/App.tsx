@@ -1,19 +1,18 @@
 import React, { useState } from "react";
-import VocabularyCard from "./components/VocabularyCard";
-import { shuffleArray } from "./utils";
+import VocabularyCard from "./components/VocabularyCard/VocabularyCard";
+import {
+  RestartButton,
+  StartButton,
+  NextWordButton,
+} from "./components/Buttons/ButtonsComponents";
+
+import { PopUpMissedVoc } from "./components/DialogPopUp/DialogPopUpComponents";
 import data from "./images/outputfile.json";
 //Components
 
 import { GlobalStyle, Wrapper } from "./App.style";
 
-type wordTrad = { arab: string; french: string };
-
-export type AnswerObject = {
-  question: string;
-  answer: string;
-  correct: boolean;
-  correctAnswer: string;
-};
+export type wordTrad = { arab: string; french: string };
 
 function App() {
   const [wordIndex, setWordIndex] = useState(0);
@@ -23,25 +22,12 @@ function App() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [allWords, setAllWords] = useState<wordTrad[]>([]);
 
-  function startGame() {
-    setIsPlaying(true);
-    setAllWords(shuffleArray(data));
-  }
-
-  function restartGame() {
-    setWordIndex(0);
-    setShowNextWord(false);
-    setIncorrectWord([]);
-    setCorrectWord([]);
-    setAllWords(shuffleArray(data));
-  }
-
   const checkAnswer = (e: React.MouseEvent<HTMLButtonElement>) => {
     const answer = e.currentTarget.value;
     if (answer === "unknown") {
-      setIncorrectWord([...incorrectWord, data[wordIndex]]);
+      setIncorrectWord([...incorrectWord, allWords[wordIndex]]);
     } else {
-      setCorrectWord([...correctWord, data[wordIndex]]);
+      setCorrectWord([...correctWord, allWords[wordIndex]]);
     }
     setShowNextWord(true);
   };
@@ -50,18 +36,23 @@ function App() {
     <>
       <GlobalStyle />
       <Wrapper className="App">
-        <h1>Arab Quizz</h1>
+        <h1>Arabe du Futur</h1>
+        {isPlaying && <PopUpMissedVoc missedWords={incorrectWord} />}
         <p className="score">✅ : {correctWord.length}</p>
         <p className="score">❌ : {incorrectWord.length}</p>
+
         {!showNextWord && isPlaying && (
-          <button className="start" onClick={restartGame}>
-            Restart Game 🔁
-          </button>
+          <RestartButton
+            setWordIndex={setWordIndex}
+            setShowNextWord={setShowNextWord}
+            setIncorrectWord={setIncorrectWord}
+            setCorrectWord={setCorrectWord}
+            setAllWords={setAllWords}
+          />
         )}
+
         {!isPlaying && (
-          <button className="start" onClick={startGame}>
-            Start The Quizz 🚀
-          </button>
+          <StartButton setIsPlaying={setIsPlaying} setAllWords={setAllWords} />
         )}
 
         {isPlaying && (
@@ -72,16 +63,13 @@ function App() {
             callback={checkAnswer}
           />
         )}
+
         {wordIndex < allWords.length - 1 && showNextWord && (
-          <button
-            className="next"
-            onClick={() => {
-              setWordIndex(wordIndex + 1);
-              setShowNextWord(false);
-            }}
-          >
-            Next Word
-          </button>
+          <NextWordButton
+            setShowNextWord={setShowNextWord}
+            wordIndex={wordIndex}
+            setWordIndex={setWordIndex}
+          />
         )}
       </Wrapper>
     </>
