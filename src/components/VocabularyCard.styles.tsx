@@ -13,13 +13,12 @@ export const Wrapper = styled.div`
     font-size: 1rem;
   }
 `;
-
-type ButtonWrapperProps = { correct: boolean; userClick: boolean };
+type ButtonWrapperProps = { known: boolean; disabled: boolean };
 export const ButtonWrapper = styled.div<ButtonWrapperProps>`
   transition: all 0.3s ease;
 
   :hover {
-    opacity: 0.8;
+    opacity: ${({ disabled }) => (disabled ? "1" : "0.6")};
   }
 
   button {
@@ -29,12 +28,12 @@ export const ButtonWrapper = styled.div<ButtonWrapperProps>`
     width: 100%;
     height: 40px;
     margin: 5px 0;
-    background: ${({ correct, userClick }) =>
-      correct
+    background: ${({ known, disabled }) =>
+      disabled
+        ? "linear-gradient(90deg, #909090, #A8A8A8)"
+        : known
         ? "linear-gradient(90deg, #56ffa4, #59bc86)"
-        : !correct && userClick
-        ? "linear-gradient(90deg, #ff5656, #c16868)"
-        : "linear-gradient(90deg, #56ccff, #6eafb4)"};
+        : "linear-gradient(90deg, #ff5656, #c16868)"};
 
     border: 3px solid #fff;
     box-shadow: 1px 2px 0px rgba(0, 0, 0, 0.1);
