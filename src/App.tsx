@@ -3,7 +3,6 @@ import VocabularyCard from "./components/VocabularyCard/VocabularyCard";
 import {
   RestartButton,
   StartButton,
-  NextWordButton,
 } from "./components/Buttons/ButtonsComponents";
 
 import { PopUpMissedVoc } from "./components/DialogPopUp/DialogPopUpComponents";
@@ -16,7 +15,6 @@ function App() {
   const [wordIndex, setWordIndex] = useState(0);
   const [incorrectWord, setIncorrectWord] = useState<wordTrad[]>([]);
   const [correctWord, setCorrectWord] = useState<wordTrad[]>([]);
-  const [showNextWord, setShowNextWord] = useState(false);
   const [isPlaying, setIsPlaying] = useState(false);
   const [allWords, setAllWords] = useState<wordTrad[]>([]);
 
@@ -27,7 +25,6 @@ function App() {
     } else {
       setCorrectWord([...correctWord, allWords[wordIndex]]);
     }
-    setShowNextWord(true);
   };
 
   return (
@@ -36,13 +33,16 @@ function App() {
       <Wrapper className="App">
         <h1>Arabe du Futur</h1>
         {isPlaying && <PopUpMissedVoc missedWords={incorrectWord} />}
-        <p className="score">✅ : {correctWord.length}</p>
-        <p className="score">❌ : {incorrectWord.length}</p>
+        <p className="score">
+          ✅ : {correctWord.length} / {allWords.length}
+        </p>
+        <p className="score">
+          ❌ : {incorrectWord.length} / {allWords.length}
+        </p>
 
         {isPlaying && (
           <RestartButton
             setWordIndex={setWordIndex}
-            setShowNextWord={setShowNextWord}
             setIncorrectWord={setIncorrectWord}
             setCorrectWord={setCorrectWord}
             setAllWords={setAllWords}
@@ -58,15 +58,8 @@ function App() {
             frenchWord={allWords[wordIndex].french}
             arabWord={allWords[wordIndex].arab}
             wordIndex={wordIndex}
-            callback={checkAnswer}
-          />
-        )}
-
-        {wordIndex < allWords.length - 1 && showNextWord && (
-          <NextWordButton
-            setShowNextWord={setShowNextWord}
-            wordIndex={wordIndex}
             setWordIndex={setWordIndex}
+            callback={checkAnswer}
           />
         )}
       </Wrapper>
