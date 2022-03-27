@@ -4,7 +4,7 @@ import "reactjs-popup/dist/index.css";
 
 import { PopUpWrapper } from "./DialogPopUpComponents.styles";
 
-import { wordTrad } from "../../App";
+import { wordTrad } from "../Quizz/Quizz";
 
 type Props = { missedWords: wordTrad[] };
 

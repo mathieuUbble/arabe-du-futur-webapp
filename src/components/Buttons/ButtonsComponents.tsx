@@ -1,7 +1,7 @@
 import React from "react";
 import { shuffleArray } from "../../utils";
 import data from "../../images/outputfile.json";
-import { wordTrad } from "../../App";
+import { wordTrad } from "../Quizz/Quizz";
 
 import {
   RestartButtonWrapper,
