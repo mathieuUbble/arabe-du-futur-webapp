@@ -13,14 +13,25 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 
-async function handleClick(email: string, password: string) {
-  const response = await fetch("http://127.0.0.1:5000/login", {
-    mode: "no-cors",
+async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+  event.preventDefault();
+  const data = new FormData(event.currentTarget);
+  const email = data.get("email");
+  const password = data.get("password");
+  console.log({
+    email: email,
+    password: password,
+  });
+  const response = await fetch("login", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email: email, password: password }),
   });
-  console.log(response);
+  console.log(
+    response.json().then((data) => {
+      console.log(data);
+    })
+  );
 }
 
 function Copyright(props: any) {
@@ -44,17 +55,6 @@ function Copyright(props: any) {
 const theme = createTheme();
 
 export default function SignIn() {
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    console.log({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-  };
-
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -88,9 +88,6 @@ export default function SignIn() {
               name="email"
               autoComplete="email"
               autoFocus
-              onChange={function (e) {
-                setEmail(e.target.value);
-              }}
             />
             <TextField
               margin="normal"
@@ -101,9 +98,6 @@ export default function SignIn() {
               type="password"
               id="password"
               autoComplete="current-password"
-              onChange={function (e) {
-                setPassword(e.target.value);
-              }}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
@@ -114,7 +108,7 @@ export default function SignIn() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              onClick={() => handleClick(email, password)}
+              // onClick={() => handleClick(email, password)}
             >
               Sign In
             </Button>
