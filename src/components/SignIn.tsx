@@ -12,8 +12,13 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
+import { useCookie } from "react-use";
+import { FormEvent } from "react";
 
-async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+async function handleSubmit(
+  event: React.FormEvent<HTMLFormElement>,
+  updateCookie: (newValue: string) => void
+) {
   event.preventDefault();
   const data = new FormData(event.currentTarget);
   const email = data.get("email");
@@ -27,11 +32,10 @@ async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email: email, password: password }),
   });
-  console.log(
-    response.json().then((data) => {
-      console.log(data);
-    })
-  );
+  response.json().then((data) => {
+    updateCookie(data.token);
+    return data.token;
+  });
 }
 
 function Copyright(props: any) {
@@ -55,6 +59,7 @@ function Copyright(props: any) {
 const theme = createTheme();
 
 export default function SignIn() {
+  const [value, updateCookie, deleteCookie] = useCookie("my-cookie");
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -75,7 +80,9 @@ export default function SignIn() {
           </Typography>
           <Box
             component="form"
-            onSubmit={handleSubmit}
+            onSubmit={(event: FormEvent<HTMLFormElement>) =>
+              handleSubmit(event, updateCookie)
+            }
             noValidate
             sx={{ mt: 1 }}
           >

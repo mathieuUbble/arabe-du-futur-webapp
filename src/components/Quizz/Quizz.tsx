@@ -1,12 +1,23 @@
 import React, { useState } from "react";
 import VocabularyCard from "../VocabularyCard/VocabularyCard";
 import { RestartButton, StartButton } from "../Buttons/ButtonsComponents";
+import { useCookie } from "react-use";
 
 import { PopUpMissedVoc } from "../DialogPopUp/DialogPopUpComponents";
 
 import { GlobalStyle, Wrapper } from "./Quizz.style";
 
 export type wordTrad = { arab: string; french: string };
+
+async function getQuizz(value: string | null) {
+  const response = await fetch("user", {
+    method: "GET",
+    headers: { "x-access-token": value !== null ? value : "value" },
+  });
+  response.json().then((data) => {
+    console.log(data);
+  });
+}
 
 function Quizz() {
   const [wordIndex, setWordIndex] = useState(0);
@@ -23,6 +34,8 @@ function Quizz() {
       setCorrectWord([...correctWord, allWords[wordIndex]]);
     }
   };
+  const [value, updateCookie, deleteCookie] = useCookie("my-cookie");
+  getQuizz(value);
 
   return (
     <>
