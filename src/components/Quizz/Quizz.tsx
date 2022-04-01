@@ -1,8 +1,12 @@
 import React, { useState } from "react";
 import VocabularyCard from "../VocabularyCard/VocabularyCard";
 import { RestartButton, StartButton } from "../Buttons/ButtonsComponents";
+import { useCookie } from "react-use";
+import { useNavigate } from "react-router-dom";
 
 import { PopUpMissedVoc } from "../DialogPopUp/DialogPopUpComponents";
+
+import { getQuizz } from "../helper/helper";
 
 import { GlobalStyle, Wrapper } from "./Quizz.style";
 
@@ -14,6 +18,10 @@ function Quizz() {
   const [correctWord, setCorrectWord] = useState<wordTrad[]>([]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [allWords, setAllWords] = useState<wordTrad[]>([]);
+
+  const navigate = useNavigate();
+  const [value, updateCookie, deleteCookie] = useCookie("my-cookie");
+  getQuizz(value, navigate);
 
   const checkAnswer = (e: React.MouseEvent<HTMLButtonElement>) => {
     const answer = e.currentTarget.value;

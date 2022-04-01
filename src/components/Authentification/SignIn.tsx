@@ -12,27 +12,10 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-
-async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
-  event.preventDefault();
-  const data = new FormData(event.currentTarget);
-  const email = data.get("email");
-  const password = data.get("password");
-  console.log({
-    email: email,
-    password: password,
-  });
-  const response = await fetch("login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email: email, password: password }),
-  });
-  console.log(
-    response.json().then((data) => {
-      console.log(data);
-    })
-  );
-}
+import { useCookie } from "react-use";
+import { FormEvent } from "react";
+import { useNavigate } from "react-router-dom";
+import { handleSubmitSignin } from "../helper/helper";
 
 function Copyright(props: any) {
   return (
@@ -55,6 +38,8 @@ function Copyright(props: any) {
 const theme = createTheme();
 
 export default function SignIn() {
+  const [value, updateCookie, deleteCookie] = useCookie("my-cookie");
+  const navigate = useNavigate();
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -75,7 +60,9 @@ export default function SignIn() {
           </Typography>
           <Box
             component="form"
-            onSubmit={handleSubmit}
+            onSubmit={(event: FormEvent<HTMLFormElement>) =>
+              handleSubmitSignin(event, updateCookie, navigate)
+            }
             noValidate
             sx={{ mt: 1 }}
           >
@@ -119,7 +106,7 @@ export default function SignIn() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="/" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
