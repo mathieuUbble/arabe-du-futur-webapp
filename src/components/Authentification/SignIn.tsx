@@ -14,29 +14,8 @@ import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useCookie } from "react-use";
 import { FormEvent } from "react";
-
-async function handleSubmit(
-  event: React.FormEvent<HTMLFormElement>,
-  updateCookie: (newValue: string) => void
-) {
-  event.preventDefault();
-  const data = new FormData(event.currentTarget);
-  const email = data.get("email");
-  const password = data.get("password");
-  console.log({
-    email: email,
-    password: password,
-  });
-  const response = await fetch("login", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ email: email, password: password }),
-  });
-  response.json().then((data) => {
-    updateCookie(data.token);
-    return data.token;
-  });
-}
+import { useNavigate } from "react-router-dom";
+import { handleSubmitSignin } from "../helper/helper";
 
 function Copyright(props: any) {
   return (
@@ -60,6 +39,7 @@ const theme = createTheme();
 
 export default function SignIn() {
   const [value, updateCookie, deleteCookie] = useCookie("my-cookie");
+  const navigate = useNavigate();
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -81,7 +61,7 @@ export default function SignIn() {
           <Box
             component="form"
             onSubmit={(event: FormEvent<HTMLFormElement>) =>
-              handleSubmit(event, updateCookie)
+              handleSubmitSignin(event, updateCookie, navigate)
             }
             noValidate
             sx={{ mt: 1 }}
@@ -126,7 +106,7 @@ export default function SignIn() {
                 </Link>
               </Grid>
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="/" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
