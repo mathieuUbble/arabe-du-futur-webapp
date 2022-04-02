@@ -1,4 +1,5 @@
 import * as React from "react";
+const API_URL = "https://arabe-du-futur-api.herokuapp.com/";
 
 export async function handleSubmitSignin(
   event: React.FormEvent<HTMLFormElement>,
@@ -13,7 +14,7 @@ export async function handleSubmitSignin(
     email: email,
     password: password,
   });
-  const response = await fetch("login", {
+  const response = await fetch(`${API_URL}/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email: email, password: password }),
@@ -44,7 +45,7 @@ export async function handleSubmitSignUp(
     password: password,
     name: name,
   });
-  const response = await fetch("signup", {
+  const response = await fetch(`${API_URL}/signup`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ email: email, password: password, name: name }),
@@ -64,7 +65,7 @@ export async function getQuizz(
   value: string | null,
   navigate: (value: string) => void
 ) {
-  const response = await fetch("user", {
+  const response = await fetch(`${API_URL}/user`, {
     method: "GET",
     headers: { "x-access-token": value !== null ? value : "value" },
   });
