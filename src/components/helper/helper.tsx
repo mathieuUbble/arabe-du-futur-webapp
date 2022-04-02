@@ -1,5 +1,5 @@
 import * as React from "react";
-const API_URL = "https://arabe-du-futur-api.herokuapp.com/";
+const API_URL = "https://arabe-du-futur-api.herokuapp.com";
 
 export async function handleSubmitSignin(
   event: React.FormEvent<HTMLFormElement>,
