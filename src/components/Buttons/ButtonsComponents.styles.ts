@@ -31,7 +31,7 @@ export const StartButtonWrapper = styled.div`
 
 export const ShowWordButtonWrapper = styled.div`
   .next {
-    max-width: 200px;
+    width: 90%;
     cursor: point;
     background: linear-gradient(180deg, #fff, #ffcc91);
     border: 2px solid #d38558;
