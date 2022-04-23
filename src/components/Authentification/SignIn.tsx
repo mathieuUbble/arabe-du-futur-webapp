@@ -1,5 +1,8 @@
 import * as React from "react";
+import { useState } from "react";
 import Avatar from "@mui/material/Avatar";
+import { CircularProgress } from "@mui/material";
+
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
 import TextField from "@mui/material/TextField";
@@ -15,7 +18,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles";
 import { useCookie } from "react-use";
 import { FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
-import { handleSubmitSignin } from "../helper/helper";
+import { handleSubmitSignin } from "../Helper/Helper";
 
 function Copyright(props: any) {
   return (
@@ -39,7 +42,9 @@ const theme = createTheme();
 
 export default function SignIn() {
   const [value, updateCookie, deleteCookie] = useCookie("my-cookie");
+  const [waiting, setWaiting] = useState(false);
   const navigate = useNavigate();
+
   return (
     <ThemeProvider theme={theme}>
       <Container component="main" maxWidth="xs">
@@ -60,9 +65,15 @@ export default function SignIn() {
           </Typography>
           <Box
             component="form"
-            onSubmit={(event: FormEvent<HTMLFormElement>) =>
-              handleSubmitSignin(event, updateCookie, navigate)
-            }
+            onSubmit={(event: FormEvent<HTMLFormElement>) => {
+              setWaiting(true);
+              handleSubmitSignin(event, updateCookie).then((data) => {
+                setWaiting(false);
+                if (data) {
+                  navigate("/quizz");
+                }
+              });
+            }}
             noValidate
             sx={{ mt: 1 }}
           >
@@ -95,8 +106,9 @@ export default function SignIn() {
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
-              // onClick={() => handleClick(email, password)}
+              disabled={waiting}
             >
+              {waiting && <CircularProgress size={20} color="secondary" />}
               Sign In
             </Button>
             <Grid container>

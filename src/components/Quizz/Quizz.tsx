@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 
 import { PopUpMissedVoc } from "../DialogPopUp/DialogPopUpComponents";
 
-import { getQuizz } from "../helper/helper";
+import { getQuizz } from "../Helper/Helper";
 
 import { GlobalStyle, Wrapper } from "./Quizz.style";
 

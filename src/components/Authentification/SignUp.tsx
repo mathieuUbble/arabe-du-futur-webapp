@@ -1,4 +1,5 @@
 import * as React from "react";
+import { useState } from "react";
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
 import CssBaseline from "@mui/material/CssBaseline";
@@ -12,7 +13,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { handleSubmitSignUp } from "../helper/helper";
+import { handleSubmitSignUp } from "../Helper/Helper";
 import { FormEvent } from "react";
 import { useCookie } from "react-use";
 import { useNavigate } from "react-router-dom";
@@ -39,6 +40,7 @@ const theme = createTheme();
 
 export default function SignUp() {
   const [value, updateCookie, deleteCookie] = useCookie("my-cookie");
+  const [waiting, setWaiting] = useState(false);
   const navigate = useNavigate();
 
   return (
@@ -62,9 +64,15 @@ export default function SignUp() {
           <Box
             component="form"
             noValidate
-            onSubmit={(event: FormEvent<HTMLFormElement>) =>
-              handleSubmitSignUp(event, updateCookie, navigate)
-            }
+            onSubmit={(event: FormEvent<HTMLFormElement>) => {
+              setWaiting(true);
+              handleSubmitSignUp(event, updateCookie).then((data) => {
+                setWaiting(false);
+                if (data) {
+                  navigate("/quizz");
+                }
+              });
+            }}
             sx={{ mt: 3 }}
           >
             <Grid container spacing={2}>

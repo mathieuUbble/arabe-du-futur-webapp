@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Wrapper } from "./VocabularyCard.styles";
+import { Wrapper, ButtonsWrapper } from "./VocabularyCard.styles";
 
 import { ValidateButton, ShowButton } from "../Buttons/ButtonsComponents";
 
@@ -23,24 +23,25 @@ function VocabularyCard(props: Props) {
     callback(e);
     setWordIndex(wordIndex + 1);
   };
-
+  const arabWordToShow = "🇦🇪 Word : " + arabWord;
+  const textToShow = !showArabWord ? "👀 Show" : arabWordToShow;
   return (
     <Wrapper>
       <p className="french">🇫🇷 Word : {frenchWord}</p>
-      <ShowButton setShowArabWord={setShowArabWord} />
-      {showArabWord && <p className="arab">🇦🇪 Word : {arabWord}</p>}
+      <ShowButton setShowArabWord={setShowArabWord} text={textToShow} />
+      <ButtonsWrapper>
+        <ValidateButton
+          showArabWord={showArabWord}
+          onClickAction={onClickAction}
+          known={true}
+        />
 
-      <ValidateButton
-        showArabWord={showArabWord}
-        onClickAction={onClickAction}
-        known={true}
-      />
-
-      <ValidateButton
-        showArabWord={showArabWord}
-        onClickAction={onClickAction}
-        known={false}
-      />
+        <ValidateButton
+          showArabWord={showArabWord}
+          onClickAction={onClickAction}
+          known={false}
+        />
+      </ButtonsWrapper>
     </Wrapper>
   );
 }
