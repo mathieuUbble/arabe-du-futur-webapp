@@ -55,7 +55,7 @@ export const ValidateButtonWrapper = styled.div<ValidateButtonWrapperProps>`
     cursor: pointer;
     user-select: none;
     font-size: 0.8rem;
-    width: 100%;
+    width: 150px;
     height: 40px;
     margin: 5px 0;
     background: ${({ known, disabled }) =>

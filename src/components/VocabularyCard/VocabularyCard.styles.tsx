@@ -14,3 +14,9 @@ export const Wrapper = styled.div`
     font-size: 1rem;
   }
 `;
+
+export const ButtonsWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+`;

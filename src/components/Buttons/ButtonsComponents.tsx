@@ -28,7 +28,10 @@ type KnownWordProps = {
   known: boolean;
 };
 
-type ShowButtonProps = { setShowArabWord: (value: boolean) => void };
+type ShowButtonProps = {
+  setShowArabWord: (value: boolean) => void;
+  text: string;
+};
 
 export function RestartButton(props: RestartButtonProps) {
   const { setWordIndex, setIncorrectWord, setCorrectWord, setAllWords } = props;
@@ -66,11 +69,11 @@ export function StartButton(props: StartButtonProps) {
 }
 
 export function ShowButton(props: ShowButtonProps) {
-  const { setShowArabWord } = props;
+  const { setShowArabWord, text } = props;
   return (
     <ShowWordButtonWrapper>
       <button onClick={() => setShowArabWord(true)} className="next">
-        👁 Show 👁
+        {text}
       </button>
     </ShowWordButtonWrapper>
   );
