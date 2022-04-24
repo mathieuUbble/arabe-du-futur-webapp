@@ -62,6 +62,7 @@ export async function getQuizz(
     headers: { "x-access-token": value !== null ? value : "value" },
   });
   if (response.status !== 200) {
-    navigate("/");
+    return true;
   }
+  return false;
 }
