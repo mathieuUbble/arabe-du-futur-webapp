@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import VocabularyCard from "../VocabularyCard/VocabularyCard";
 import { RestartButton, StartButton } from "../Buttons/ButtonsComponents";
 import { useCookie } from "react-use";
@@ -18,10 +18,11 @@ function Quizz() {
   const [correctWord, setCorrectWord] = useState<wordTrad[]>([]);
   const [isPlaying, setIsPlaying] = useState(false);
   const [allWords, setAllWords] = useState<wordTrad[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
 
   const navigate = useNavigate();
   const [value, updateCookie, deleteCookie] = useCookie("my-cookie");
-  getQuizz(value, navigate);
+  // getQuizz(value, navigate);
 
   const checkAnswer = (e: React.MouseEvent<HTMLButtonElement>) => {
     const answer = e.currentTarget.value;
@@ -31,8 +32,18 @@ function Quizz() {
       setCorrectWord([...correctWord, allWords[wordIndex]]);
     }
   };
+  useEffect(() => {
+    getQuizz(value, navigate).then((data) => {
+      setLoading(false);
+      if (!data) {
+        console.log("bienvenue");
+      } else {
+        navigate("/");
+      }
+    });
+  }, []);
 
-  return (
+  const a = (
     <>
       <GlobalStyle />
       <Wrapper className="App">
@@ -70,6 +81,9 @@ function Quizz() {
       </Wrapper>
     </>
   );
+  const test = <div>hello </div>;
+  const display = loading ? test : a;
+  return display;
 }
 
 export default Quizz;
